@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-lang-key="title"></title>
+    <link rel="stylesheet" href="./assets/css/style.css" />
+  </head>
+
+  <style>
+    body {
+      background-image: url("./assets/images/bg-img.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: background-image 0.8s ease;
+    }
+
+    body.intro-active .home-button,
+    body.intro-active .language-container,
+    body.intro-active main {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    body.intro-done .home-button,
+    body.intro-done .language-container,
+    body.intro-done main {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition:
+        opacity 0.8s ease,
+        visibility 0.8s ease;
+    }
+
+    body.bg-change {
+      background-image: url("./assets/images/bg-img-1.png");
+    }
+
+    .page-title {
+      position: fixed;
+      top: 2%;
+      left: 50%;
+      padding: 0.5vw 2vw;
+      height: auto;
+      text-align: center;
+      z-index: 10000;
+      border-radius: 0.5vw;
+      background-color: #ffe137;
+      will-change: transform, top, left, border-radius;
+  transition:
+    top 1.8s cubic-bezier(0.16, 1, 0.3, 1),
+    left 1.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.8s cubic-bezier(0.16, 1, 0.3, 1),
+    border-radius 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 3s ease;
+      cursor: pointer;
+    }
+
+    body.intro-active .page-title {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(2);
+    }
+
+    body.intro-active .page-title:hover {
+      border-radius: 30vw;
+    }
+
+    body.intro-done .page-title {
+      top: 2%;
+      left: 50%;
+      transform: translateX(-50%) scale(1);
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .page-title span {
+      font-size: 3vw;
+      text-align: center;
+      color: #313131;
+      font-family: "LondrinaSolid";
+      display: block;
+      font-weight: bolder !important;
+    }
+
+    main {
+      position: relative;
+      padding: 0 5vw;
+      width: 100%;
+      height: 50vw;
+    }
+  </style>
+
+  <body class="intro-active">
+    <a class="home-button home-btn" href="index.html">
+      <img src="./assets/images/home-btn.png" alt="" />
+    </a>
+
+    <div class="page-title">
+      <span data-lang-key="title"></span>
+    </div>
+
+    <div class="language-container">
+      <div class="english active">E</div>
+      <div class="hindi">H</div>
+      <div class="gujrati">G</div>
+    </div>
+
+    <main>
+      <div class="row">
+        <div class="col col-1">
+          <div class="hands">
+            <img class="black-ovel" src="./assets/images/Group-1.png" alt="" />
+            <div class="hand-wrapper">
+              <img
+                class="hand-back"
+                src="./assets/images/hand-back.png"
+                alt=""
+              />
+              <img
+                class="hand-front"
+                src="./assets/images/hand-front.png"
+                alt=""
+              />
+            </div>
+          </div>
+          <a href="what.html">
+            <div class="num" data-lang-key="num-1"></div>
+            <div class="text" data-lang-key="title-1"></div>
+          </a>
+        </div>
+
+        <div class="col col-2">
+          <div class="hands">
+            <img class="black-ovel" src="./assets/images/Group-1.png" alt="" />
+            <div class="hand-wrapper">
+              <img
+                class="hand-back"
+                src="./assets/images/hand-back.png"
+                alt=""
+              />
+              <img
+                class="hand-front"
+                src="./assets/images/hand-front.png"
+                alt=""
+              />
+            </div>
+          </div>
+          <a href="example.html">
+            <div class="num" data-lang-key="num-2"></div>
+            <div class="text" data-lang-key="title-2"></div>
+          </a>
+        </div>
+
+        <div class="col col-3">
+          <div class="hands">
+            <img class="black-ovel" src="./assets/images/Group-1.png" alt="" />
+            <div class="hand-wrapper">
+              <img
+                class="hand-back"
+                src="./assets/images/hand-back.png"
+                alt=""
+              />
+              <img
+                class="hand-front"
+                src="./assets/images/hand-front.png"
+                alt=""
+              />
+            </div>
+          </div>
+          <a href="disadvantages.html">
+            <div class="num" data-lang-key="num-3"></div>
+            <div class="text" data-lang-key="title-3"></div>
+          </a>
+        </div>
+
+        <div class="col col-4">
+          <div class="hands">
+            <img class="black-ovel" src="./assets/images/Group-1.png" alt="" />
+            <div class="hand-wrapper">
+              <img
+                class="hand-back"
+                src="./assets/images/hand-back.png"
+                alt=""
+              />
+              <img
+                class="hand-front"
+                src="./assets/images/hand-front.png"
+                alt=""
+              />
+            </div>
+          </div>
+          <a href="why.html">
+            <div class="num" data-lang-key="num-4"></div>
+            <div class="text" data-lang-key="title-4"></div>
+          </a>
+        </div>
+
+        <div class="col col-5">
+          <div class="hands">
+            <img class="black-ovel" src="./assets/images/Group-1.png" alt="" />
+            <div class="hand-wrapper">
+              <img
+                class="hand-back"
+                src="./assets/images/hand-back.png"
+                alt=""
+              />
+              <img
+                class="hand-front"
+                src="./assets/images/hand-front.png"
+                alt=""
+              />
+            </div>
+          </div>
+          <a href="how.html">
+            <div class="num" data-lang-key="num-5"></div>
+            <div class="text" data-lang-key="title-5"></div>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <script src="./assets/js/app.js"></script>
+
+    <script>
+      const pageTitle = document.querySelector(".page-title");
+
+      pageTitle.addEventListener("click", function () {
+        if (document.body.classList.contains("intro-done")) return;
+
+        document.body.classList.add("intro-done");
+        document.body.classList.add("bg-change");
+        document.body.classList.remove("intro-active");
+      });
+
+      document.querySelectorAll(".col a").forEach(function (link) {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          var col = link.closest(".col");
+          var href = link.getAttribute("href");
+
+          if (col.dataset.animating === "true") return;
+          col.dataset.animating = "true";
+
+          col.classList.add("anim-front-down");
+
+          setTimeout(function () {
+            col.classList.remove("anim-front-down");
+            col.classList.add("anim-swap");
+
+            setTimeout(function () {
+              col.classList.remove("anim-swap");
+              col.classList.add("anim-up");
+
+              setTimeout(function () {
+                window.location.href = href;
+              }, 500);
+            }, 500);
+          }, 1000);
+        });
+      });
+    </script>
+  </body>
+</html>

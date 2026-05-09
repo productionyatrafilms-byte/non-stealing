@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-lang-key="title-5"></title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+
+    <style>
+      .page-title {
+        position: fixed;
+        top: 2%;
+        left: 50%;
+        padding: 0.5vw 2vw;
+        height: auto;
+        text-align: center;
+        z-index: 10000;
+        border-radius: 0.5vw;
+        background-color: #ffe137;
+        transition: opacity 3s ease;
+        transform: translateX(-50%);
+      }
+
+      .page-title span {
+        font-size: 2.5vw;
+        text-align: center;
+        color: #313131;
+        font-family: "LondrinaSolid";
+        display: block;
+        font-weight: bolder !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <a class="home-button home-btn" href="index.html">
+      <img src="./assets/images/home-btn.png" alt="" />
+    </a>
+
+    <div class="page-title">
+      <span data-lang-key="title-5"></span>
+    </div>
+
+    <div class="language-container">
+      <div class="english active">E</div>
+      <div class="hindi">H</div>
+      <div class="gujrati">G</div>
+    </div>
+
+    <div class="swiper-container">
+      <div class="pages">
+        <a class="page" data-lang-key="num.1" href="what.html"></a>
+        <a class="page" data-lang-key="num.2" href="example.html"></a>
+        <a class="page" data-lang-key="num.3" href="disadvantages.html"></a>
+        <a class="page" data-lang-key="num.4" href="why.html"></a>
+        <a class="page active" data-lang-key="num.5" href="how.html"></a>
+      </div>
+
+      <div class="video-wrapper">
+        <div class="swiper video-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <video src="./assets/videos/5-1.mp4" muted playsinline></video>
+            </div>
+            <div class="swiper-slide">
+              <video src="./assets/videos/5-2.mp4" muted playsinline></video>
+            </div>
+            <div class="swiper-slide">
+              <video src="./assets/videos/5-3.mp4" muted playsinline></video>
+            </div>
+            <div class="swiper-slide">
+              <video src="./assets/videos/5-4.mp4" muted playsinline></video>
+            </div>
+            <div class="swiper-slide">
+              <video src="./assets/videos/5-5.mp4" muted playsinline></video>
+            </div>
+          </div>
+        </div>
+
+        <button class="nav-btn prev-btn">
+          <img src="./assets/images/prev-btn.png" alt="Previous" />
+        </button>
+
+        <button class="nav-btn next-btn">
+          <img src="./assets/images/next-btn.png" alt="Next" />
+        </button>
+      </div>
+
+      <div class="content-container">
+        <div class="swiper content-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <p data-lang-key="slide-5.1"></p>
+            </div>
+            <div class="swiper-slide">
+              <p data-lang-key="slide-5.2"></p>
+            </div>
+            <div class="swiper-slide">
+              <p data-lang-key="slide-5.3"></p>
+            </div>
+            <div class="swiper-slide">
+              <p data-lang-key="slide-5.4"></p>
+            </div>
+            <div class="swiper-slide">
+              <p data-lang-key="slide-5.5"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+      const prevBtn = document.querySelector(".prev-btn");
+      const nextBtn = document.querySelector(".next-btn");
+      const LAST_SLIDE_INDEX = 4;
+
+      const videoSwiper = new Swiper(".video-swiper", {
+        slidesPerView: 1,
+        speed: 900,
+        effect: "slide",
+        allowTouchMove: false,
+      });
+
+      const contentSwiper = new Swiper(".content-swiper", {
+        slidesPerView: 1,
+        speed: 700,
+        effect: "fade",
+        fadeEffect: {
+          crossFade: true,
+        },
+        allowTouchMove: false,
+      });
+
+      function playActiveVideo() {
+        document.querySelectorAll(".video-swiper video").forEach((video) => {
+          video.pause();
+          video.currentTime = 0;
+        });
+
+        const activeVideo = document.querySelector(
+          ".video-swiper .swiper-slide-active video",
+        );
+
+        if (activeVideo) activeVideo.play();
+      }
+
+      function updateButtons() {
+        prevBtn.style.display = videoSwiper.activeIndex === 0 ? "none" : "flex";
+        nextBtn.style.display = "flex";
+      }
+
+      nextBtn.addEventListener("click", () => {
+        if (videoSwiper.activeIndex === LAST_SLIDE_INDEX) {
+          window.location.href = "pranam.html";
+          return;
+        }
+
+        videoSwiper.slideNext();
+        contentSwiper.slideNext();
+      });
+
+      prevBtn.addEventListener("click", () => {
+        videoSwiper.slidePrev();
+        contentSwiper.slidePrev();
+      });
+
+      videoSwiper.on("slideChangeTransitionEnd", () => {
+        updateButtons();
+        playActiveVideo();
+      });
+
+      updateButtons();
+      playActiveVideo();
+    </script>
+
+    <script src="./assets/js/app.js"></script>
+  </body>
+</html>

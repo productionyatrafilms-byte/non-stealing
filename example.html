@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-lang-key="title-2"></title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="./assets/css/style.css" />
+
+    <style>
+      .page-title {
+        position: fixed;
+        top: 2%;
+        left: 50%;
+        padding: 0.5vw 2vw;
+        height: auto;
+        text-align: center;
+        z-index: 10000;
+        border-radius: 0.5vw;
+        background-color: #ffe137;
+        transition: opacity 3s ease;
+        transform: translateX(-50%);
+      }
+
+      .page-title span {
+        font-size: 2.5vw;
+        text-align: center;
+        color: #313131;
+        font-family: "LondrinaSolid";
+        display: block;
+        font-weight: bolder !important;
+      }
+
+      .video-btn {
+        position: fixed;
+        bottom: 5vw;
+        right: 2vw;
+        z-index: 10000;
+        animation: videoBtnPopupInfinite 1.4s ease-in-out infinite;
+        transform-origin: center;
+      }
+
+      .video-btn::before {
+        content: "";
+        position: absolute;
+        inset: -0.7vw;
+        border-radius: 6vw;
+        background: rgba(255, 225, 55, 0.5);
+        z-index: -1;
+        animation: videoBtnGlowInfinite 1.4s ease-out infinite;
+        pointer-events: none;
+      }
+
+      .video-btn::after {
+        content: "";
+        position: absolute;
+        inset: -1.2vw;
+        border: 0.18vw solid rgba(255, 225, 55, 0.8);
+        border-radius: 7vw;
+        z-index: -2;
+        animation: videoBtnRingInfinite 1.4s ease-out infinite;
+        pointer-events: none;
+      }
+
+      .start-video-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5vw;
+        padding: 0.4vw 1.3vw 0.4vw 0.45vw;
+        border: 0.22vw solid #ffe137;
+        border-radius: 5vw;
+        background: #6563c1;
+        color: #ffffff;
+        font-family: "LondrinaSolid";
+        font-size: 2.2vw;
+        font-weight: 900;
+        cursor: pointer;
+        box-shadow:
+          0 0.25vw 0.35vw rgba(0, 0, 0, 0.25),
+          0 0 1vw rgba(255, 225, 55, 0.8);
+      }
+
+      .play-circle {
+        width: 2.8vw;
+        height: 2.8vw;
+        border-radius: 50%;
+        background: #ffffff;
+        color: #6563c1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5vw;
+        animation: playIconPopupInfinite 1.4s ease-in-out infinite;
+      }
+
+      @keyframes videoBtnPopupInfinite {
+        0%,
+        100% {
+          transform: scale(1) translateY(0);
+        }
+
+        30% {
+          transform: scale(1.15) translateY(-0.4vw);
+        }
+
+        45% {
+          transform: scale(0.96) translateY(0);
+        }
+
+        60% {
+          transform: scale(1.08) translateY(-0.25vw);
+        }
+
+        75% {
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      @keyframes videoBtnGlowInfinite {
+        0% {
+          transform: scale(0.85);
+          opacity: 0.8;
+        }
+
+        100% {
+          transform: scale(1.45);
+          opacity: 0;
+        }
+      }
+
+      @keyframes videoBtnRingInfinite {
+        0% {
+          transform: scale(0.8);
+          opacity: 0.9;
+        }
+
+        100% {
+          transform: scale(1.55);
+          opacity: 0;
+        }
+      }
+
+      .video-popup {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: transparent !important;
+      }
+
+      .video-popup.active {
+        display: flex;
+      }
+
+      .video-blur-bg {
+        position: absolute;
+        inset: 0;
+        backdrop-filter: blur(0.8vw);
+        -webkit-backdrop-filter: blur(0.8vw);
+        background: transparent !important;
+      }
+
+      .popup-video-box {
+        position: relative;
+        width: 62vw;
+        height: 35vw;
+        z-index: 2;
+        border-radius: 1vw;
+        overflow: hidden;
+        background: #000;
+        transition:
+          width 0.5s ease,
+          height 0.5s ease;
+      }
+
+      .popup-video-box.zoomed {
+        width: 85vw;
+        height: 48vw;
+      }
+
+      .popup-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        pointer-events: none;
+      }
+
+      .video-click-layer {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        cursor: pointer;
+        background: transparent;
+      }
+
+      .video-close-btn {
+        position: absolute;
+        top: 7%;
+        right: 15%;
+        z-index: 10;
+        width: 3vw;
+        height: 3vw;
+        border-radius: 50%;
+        border: none;
+        background: #fff;
+        color: #7b1600;
+        font-size: 1.6vw;
+        cursor: pointer;
+      }
+
+      .channel-blur {
+        position: absolute;
+        top: 1vw;
+        right: 1vw;
+        width: 10vw;
+        height: 4.2vw;
+        backdrop-filter: blur(1.2vw);
+        -webkit-backdrop-filter: blur(1.2vw);
+        background: rgba(255, 255, 255, 0.22);
+        border-radius: 0.6vw;
+        pointer-events: none;
+        z-index: 4;
+      }
+
+      .custom-video-controls {
+        position: absolute;
+        left: 50%;
+        bottom: 1vw;
+        transform: translateX(-50%);
+        width: 92%;
+        height: 3.5vw;
+        padding: 0 1vw;
+        z-index: 6;
+        display: flex;
+        align-items: center;
+        gap: 0.8vw;
+        border-radius: 5vw;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(0.4vw);
+        -webkit-backdrop-filter: blur(0.4vw);
+      }
+
+      .custom-play-btn,
+      .zoom-btn {
+        width: 2.4vw;
+        height: 2.4vw;
+        border-radius: 50%;
+        border: none;
+        background: #fff;
+        color: #7b1600;
+        font-size: 1vw;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .video-time {
+        color: #fff;
+        font-size: 1vw;
+        font-family: Arial, sans-serif;
+        min-width: 3vw;
+        text-align: center;
+      }
+
+      .video-progress {
+        flex: 1;
+        height: 0.45vw;
+        cursor: default;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <a class="home-button home-btn" href="index.html">
+      <img src="./assets/images/home-btn.png" alt="" />
+    </a>
+
+    <div class="page-title">
+      <span data-lang-key="title-2"></span>
+    </div>
+
+    <div class="video-btn">
+      <button class="start-video-btn">
+        <span class="play-circle">
+          <i class="fa-solid fa-play"></i>
+        </span>
+        <span>START</span>
+      </button>
+    </div>
+
+    <div class="language-container">
+      <div class="english active">E</div>
+      <div class="hindi">H</div>
+      <div class="gujrati">G</div>
+    </div>
+
+    <div class="swiper-container">
+      <div class="pages">
+        <a class="page" data-lang-key="num.1" href="what.html"></a>
+        <a class="page active" data-lang-key="num.2" href="example.html"></a>
+        <a class="page" data-lang-key="num.3" href="disadvantages.html"></a>
+        <a class="page" data-lang-key="num.4" href="why.html"></a>
+        <a class="page" data-lang-key="num.5" href="how.html"></a>
+      </div>
+
+      <div class="video-popup">
+        <div class="video-blur-bg"></div>
+
+        <button class="video-close-btn">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="popup-video-box">
+          <video
+            class="popup-video"
+            src="./assets/videos/example-v.mp4"
+            playsinline
+          ></video>
+
+          <div class="video-click-layer"></div>
+
+          <div class="channel-blur"></div>
+
+          <div class="custom-video-controls">
+            <button class="custom-play-btn">
+              <i class="fa-solid fa-play"></i>
+            </button>
+
+            <span class="video-time current-time">0:00</span>
+
+            <input
+              type="range"
+              class="video-progress"
+              min="0"
+              max="100"
+              value="0"
+              tabindex="-1"
+              aria-disabled="true"
+            />
+
+            <span class="video-time total-time">0:00</span>
+
+            <button class="zoom-btn">
+              <i class="fa-solid fa-expand"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-wrapper">
+        <div class="swiper video-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <video src="./assets/videos/2-1.mp4" muted playsinline></video>
+            </div>
+            <div class="swiper-slide">
+              <video src="./assets/videos/2-2.mp4" muted playsinline></video>
+            </div>
+            <div class="swiper-slide">
+              <video src="./assets/videos/2-3.mp4" muted playsinline></video>
+            </div>
+            <div class="swiper-slide">
+              <video src="./assets/videos/2-4.mp4" muted playsinline></video>
+            </div>
+            <div class="swiper-slide">
+              <video src="./assets/videos/2-5.mp4" muted playsinline></video>
+            </div>
+            <div class="swiper-slide">
+              <video src="./assets/videos/2-6.mp4" muted playsinline></video>
+            </div>
+            <div class="swiper-slide">
+              <video src="./assets/videos/2-7.mp4" muted playsinline></video>
+            </div>
+            <div class="swiper-slide">
+              <video src="./assets/videos/2-8.mp4" muted playsinline></video>
+            </div>
+            <div class="swiper-slide">
+              <video src="./assets/videos/2-9.mp4" muted playsinline></video>
+            </div>
+            <div class="swiper-slide">
+              <video src="./assets/videos/2-10.mp4" muted playsinline></video>
+            </div>
+          </div>
+        </div>
+
+        <button class="nav-btn prev-btn">
+          <img src="./assets/images/prev-btn.png" alt="Previous" />
+        </button>
+
+        <button class="nav-btn next-btn">
+          <img src="./assets/images/next-btn.png" alt="Next" />
+        </button>
+      </div>
+
+      <div class="content-container">
+        <div class="swiper content-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><p data-lang-key="slide-2.1"></p></div>
+            <div class="swiper-slide"><p data-lang-key="slide-2.2"></p></div>
+            <div class="swiper-slide"><p data-lang-key="slide-2.3"></p></div>
+            <div class="swiper-slide"><p data-lang-key="slide-2.4"></p></div>
+            <div class="swiper-slide"><p data-lang-key="slide-2.5"></p></div>
+            <div class="swiper-slide"><p data-lang-key="slide-2.6"></p></div>
+            <div class="swiper-slide"><p data-lang-key="slide-2.7"></p></div>
+            <div class="swiper-slide"><p data-lang-key="slide-2.8"></p></div>
+            <div class="swiper-slide"><p data-lang-key="slide-2.9"></p></div>
+            <div class="swiper-slide"><p data-lang-key="slide-2.10"></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+      const prevBtn = document.querySelector(".prev-btn");
+      const nextBtn = document.querySelector(".next-btn");
+
+      const videoSwiper = new Swiper(".video-swiper", {
+        slidesPerView: 1,
+        speed: 900,
+        effect: "slide",
+        allowTouchMove: false,
+      });
+
+      const contentSwiper = new Swiper(".content-swiper", {
+        slidesPerView: 1,
+        speed: 700,
+        effect: "fade",
+        fadeEffect: {
+          crossFade: true,
+        },
+        allowTouchMove: false,
+      });
+
+      function playActiveVideo() {
+        document.querySelectorAll(".video-swiper video").forEach((video) => {
+          video.pause();
+          video.currentTime = 0;
+        });
+
+        const activeVideo = document.querySelector(
+          ".video-swiper .swiper-slide-active video",
+        );
+
+        if (activeVideo) activeVideo.play();
+      }
+
+      function updateButtons() {
+        prevBtn.style.display = videoSwiper.activeIndex === 0 ? "none" : "flex";
+        nextBtn.style.display = videoSwiper.activeIndex === 9 ? "none" : "flex";
+      }
+
+      nextBtn.addEventListener("click", () => {
+        videoSwiper.slideNext();
+        contentSwiper.slideNext();
+      });
+
+      prevBtn.addEventListener("click", () => {
+        videoSwiper.slidePrev();
+        contentSwiper.slidePrev();
+      });
+
+      videoSwiper.on("slideChangeTransitionEnd", () => {
+        updateButtons();
+        playActiveVideo();
+      });
+
+      updateButtons();
+      playActiveVideo();
+
+      const startVideoBtn = document.querySelector(".start-video-btn");
+      const startVideoIcon = document.querySelector(".start-video-btn i");
+      const videoPopup = document.querySelector(".video-popup");
+      const videoCloseBtn = document.querySelector(".video-close-btn");
+
+      const popupVideoBox = document.querySelector(".popup-video-box");
+      const popupVideo = document.querySelector(".popup-video");
+      const videoClickLayer = document.querySelector(".video-click-layer");
+
+      const customPlayBtn = document.querySelector(".custom-play-btn");
+      const customPlayIcon = document.querySelector(".custom-play-btn i");
+
+      const zoomBtn = document.querySelector(".zoom-btn");
+      const zoomIcon = document.querySelector(".zoom-btn i");
+
+      const progressBar = document.querySelector(".video-progress");
+      const currentTimeText = document.querySelector(".current-time");
+      const totalTimeText = document.querySelector(".total-time");
+
+      function updatePlayIcons(isPlaying) {
+        if (isPlaying) {
+          customPlayIcon.classList.remove("fa-play");
+          customPlayIcon.classList.add("fa-pause");
+
+          startVideoIcon.classList.remove("fa-play");
+          startVideoIcon.classList.add("fa-pause");
+        } else {
+          customPlayIcon.classList.remove("fa-pause");
+          customPlayIcon.classList.add("fa-play");
+
+          startVideoIcon.classList.remove("fa-pause");
+          startVideoIcon.classList.add("fa-play");
+        }
+      }
+
+      function openPopupVideo() {
+        videoPopup.classList.add("active");
+
+        const startAt = 5;
+
+        if (popupVideo.readyState >= 1) {
+          popupVideo.currentTime = startAt;
+          popupVideo.play();
+        } else {
+          popupVideo.addEventListener(
+            "loadedmetadata",
+            () => {
+              popupVideo.currentTime = startAt;
+              popupVideo.play();
+            },
+            { once: true },
+          );
+        }
+
+        updatePlayIcons(true);
+      }
+
+      function closePopupVideo() {
+        videoPopup.classList.remove("active");
+
+        popupVideo.pause();
+        popupVideo.currentTime = 5;
+
+        progressBar.value = 0;
+        currentTimeText.textContent = "0:05";
+
+        popupVideoBox.classList.remove("zoomed");
+
+        zoomIcon.classList.remove("fa-compress");
+        zoomIcon.classList.add("fa-expand");
+
+        updatePlayIcons(false);
+      }
+
+      function toggleVideoPlayPause() {
+        if (popupVideo.paused) {
+          popupVideo.play();
+          updatePlayIcons(true);
+        } else {
+          popupVideo.pause();
+          updatePlayIcons(false);
+        }
+      }
+
+      function updateProgress() {
+        const current = popupVideo.currentTime;
+        const duration = popupVideo.duration;
+
+        if (duration > 0) {
+          progressBar.value = (current / duration) * 100;
+          currentTimeText.textContent = formatTime(current);
+          totalTimeText.textContent = formatTime(duration);
+        }
+      }
+
+      function formatTime(time) {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60)
+          .toString()
+          .padStart(2, "0");
+
+        return `${minutes}:${seconds}`;
+      }
+
+      startVideoBtn.addEventListener("click", openPopupVideo);
+
+      customPlayBtn.addEventListener("click", toggleVideoPlayPause);
+
+      videoClickLayer.addEventListener("click", toggleVideoPlayPause);
+
+      videoCloseBtn.addEventListener("click", closePopupVideo);
+
+      videoPopup.addEventListener("click", (e) => {
+        if (
+          e.target === videoPopup ||
+          e.target.classList.contains("video-blur-bg")
+        ) {
+          closePopupVideo();
+        }
+      });
+
+      popupVideo.addEventListener("timeupdate", updateProgress);
+
+      popupVideo.addEventListener("loadedmetadata", () => {
+        totalTimeText.textContent = formatTime(popupVideo.duration);
+      });
+
+      popupVideo.addEventListener("play", () => {
+        updatePlayIcons(true);
+      });
+
+      popupVideo.addEventListener("pause", () => {
+        updatePlayIcons(false);
+      });
+
+      popupVideo.addEventListener("ended", () => {
+        updatePlayIcons(false);
+        progressBar.value = 100;
+      });
+
+      progressBar.addEventListener("mousedown", (e) => e.preventDefault());
+      progressBar.addEventListener("touchstart", (e) => e.preventDefault());
+      progressBar.addEventListener("keydown", (e) => e.preventDefault());
+
+      zoomBtn.addEventListener("click", () => {
+        popupVideoBox.classList.toggle("zoomed");
+
+        if (popupVideoBox.classList.contains("zoomed")) {
+          zoomIcon.classList.remove("fa-expand");
+          zoomIcon.classList.add("fa-compress");
+        } else {
+          zoomIcon.classList.remove("fa-compress");
+          zoomIcon.classList.add("fa-expand");
+        }
+      });
+    </script>
+
+    <script src="./assets/js/app.js"></script>
+  </body>
+</html>
