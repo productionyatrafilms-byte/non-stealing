@@ -223,20 +223,6 @@
         cursor: pointer;
       }
 
-      .channel-blur {
-        position: absolute;
-        top: 1vw;
-        right: 1vw;
-        width: 10vw;
-        height: 4.2vw;
-        backdrop-filter: blur(1.2vw);
-        -webkit-backdrop-filter: blur(1.2vw);
-        background: rgba(255, 255, 255, 0.22);
-        border-radius: 0.6vw;
-        pointer-events: none;
-        z-index: 4;
-      }
-
       .custom-video-controls {
         position: absolute;
         left: 50%;
@@ -332,13 +318,11 @@
         <div class="popup-video-box">
           <video
             class="popup-video"
-            src="./assets/videos/topic-4v.mp4"
+            src="./assets/videos/topic-4.webm"
             playsinline
           ></video>
 
           <div class="video-click-layer"></div>
-
-          <div class="channel-blur"></div>
 
           <div class="custom-video-controls">
             <button class="custom-play-btn">
@@ -452,7 +436,10 @@
           ".video-swiper .swiper-slide-active video",
         );
 
-        if (activeVideo) activeVideo.play();
+        if (activeVideo) {
+          activeVideo.currentTime = 0;
+          activeVideo.play();
+        }
       }
 
       function updateButtons() {
@@ -478,7 +465,6 @@
       updateButtons();
       playActiveVideo();
 
-      /* Popup Video JS */
       const startVideoBtn = document.querySelector(".start-video-btn");
       const startVideoIcon = document.querySelector(".start-video-btn i");
       const videoPopup = document.querySelector(".video-popup");
@@ -517,7 +503,7 @@
       function openPopupVideo() {
         videoPopup.classList.add("active");
 
-        const startAt = 5;
+        const startAt = 0;
 
         if (popupVideo.readyState >= 1) {
           popupVideo.currentTime = startAt;
@@ -533,6 +519,9 @@
           );
         }
 
+        progressBar.value = 0;
+        currentTimeText.textContent = "0:00";
+
         updatePlayIcons(true);
       }
 
@@ -540,10 +529,10 @@
         videoPopup.classList.remove("active");
 
         popupVideo.pause();
-        popupVideo.currentTime = 5;
+        popupVideo.currentTime = 0;
 
         progressBar.value = 0;
-        currentTimeText.textContent = "0:05";
+        currentTimeText.textContent = "0:00";
 
         popupVideoBox.classList.remove("zoomed");
 
@@ -639,4 +628,3 @@
     <script src="./assets/js/app.js"></script>
   </body>
 </html>
-

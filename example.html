@@ -221,19 +221,6 @@
         cursor: pointer;
       }
 
-      .channel-blur {
-        position: absolute;
-        top: 1vw;
-        right: 1vw;
-        width: 10vw;
-        height: 4.2vw;
-        backdrop-filter: blur(1.2vw);
-        -webkit-backdrop-filter: blur(1.2vw);
-        background: rgba(255, 255, 255, 0.22);
-        border-radius: 0.6vw;
-        pointer-events: none;
-        z-index: 4;
-      }
 
       .custom-video-controls {
         position: absolute;
@@ -329,13 +316,11 @@
         <div class="popup-video-box">
           <video
             class="popup-video"
-            src="./assets/videos/example-v.mp4"
+            src="./assets/videos/topic-2.webm"
             playsinline
           ></video>
 
           <div class="video-click-layer"></div>
-
-          <div class="channel-blur"></div>
 
           <div class="custom-video-controls">
             <button class="custom-play-btn">
@@ -429,218 +414,224 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
-      const prevBtn = document.querySelector(".prev-btn");
-      const nextBtn = document.querySelector(".next-btn");
+  const prevBtn = document.querySelector(".prev-btn");
+  const nextBtn = document.querySelector(".next-btn");
 
-      const videoSwiper = new Swiper(".video-swiper", {
-        slidesPerView: 1,
-        speed: 900,
-        effect: "slide",
-        allowTouchMove: false,
-      });
+  const videoSwiper = new Swiper(".video-swiper", {
+    slidesPerView: 1,
+    speed: 900,
+    effect: "slide",
+    allowTouchMove: false,
+  });
 
-      const contentSwiper = new Swiper(".content-swiper", {
-        slidesPerView: 1,
-        speed: 700,
-        effect: "fade",
-        fadeEffect: {
-          crossFade: true,
-        },
-        allowTouchMove: false,
-      });
+  const contentSwiper = new Swiper(".content-swiper", {
+    slidesPerView: 1,
+    speed: 700,
+    effect: "fade",
+    fadeEffect: {
+      crossFade: true,
+    },
+    allowTouchMove: false,
+  });
 
-      function playActiveVideo() {
-        document.querySelectorAll(".video-swiper video").forEach((video) => {
-          video.pause();
-          video.currentTime = 0;
-        });
+  function playActiveVideo() {
+    document.querySelectorAll(".video-swiper video").forEach((video) => {
+      video.pause();
+      video.currentTime = 0;
+    });
 
-        const activeVideo = document.querySelector(
-          ".video-swiper .swiper-slide-active video",
-        );
+    const activeVideo = document.querySelector(
+      ".video-swiper .swiper-slide-active video",
+    );
 
-        if (activeVideo) activeVideo.play();
-      }
+    if (activeVideo) {
+      activeVideo.currentTime = 0;
+      activeVideo.play();
+    }
+  }
 
-      function updateButtons() {
-        prevBtn.style.display = videoSwiper.activeIndex === 0 ? "none" : "flex";
-        nextBtn.style.display = videoSwiper.activeIndex === 9 ? "none" : "flex";
-      }
+  function updateButtons() {
+    prevBtn.style.display = videoSwiper.activeIndex === 0 ? "none" : "flex";
+    nextBtn.style.display = videoSwiper.activeIndex === 9 ? "none" : "flex";
+  }
 
-      nextBtn.addEventListener("click", () => {
-        videoSwiper.slideNext();
-        contentSwiper.slideNext();
-      });
+  nextBtn.addEventListener("click", () => {
+    videoSwiper.slideNext();
+    contentSwiper.slideNext();
+  });
 
-      prevBtn.addEventListener("click", () => {
-        videoSwiper.slidePrev();
-        contentSwiper.slidePrev();
-      });
+  prevBtn.addEventListener("click", () => {
+    videoSwiper.slidePrev();
+    contentSwiper.slidePrev();
+  });
 
-      videoSwiper.on("slideChangeTransitionEnd", () => {
-        updateButtons();
-        playActiveVideo();
-      });
+  videoSwiper.on("slideChangeTransitionEnd", () => {
+    updateButtons();
+    playActiveVideo();
+  });
 
-      updateButtons();
-      playActiveVideo();
+  updateButtons();
+  playActiveVideo();
 
-      const startVideoBtn = document.querySelector(".start-video-btn");
-      const startVideoIcon = document.querySelector(".start-video-btn i");
-      const videoPopup = document.querySelector(".video-popup");
-      const videoCloseBtn = document.querySelector(".video-close-btn");
+  const startVideoBtn = document.querySelector(".start-video-btn");
+  const startVideoIcon = document.querySelector(".start-video-btn i");
+  const videoPopup = document.querySelector(".video-popup");
+  const videoCloseBtn = document.querySelector(".video-close-btn");
 
-      const popupVideoBox = document.querySelector(".popup-video-box");
-      const popupVideo = document.querySelector(".popup-video");
-      const videoClickLayer = document.querySelector(".video-click-layer");
+  const popupVideoBox = document.querySelector(".popup-video-box");
+  const popupVideo = document.querySelector(".popup-video");
+  const videoClickLayer = document.querySelector(".video-click-layer");
 
-      const customPlayBtn = document.querySelector(".custom-play-btn");
-      const customPlayIcon = document.querySelector(".custom-play-btn i");
+  const customPlayBtn = document.querySelector(".custom-play-btn");
+  const customPlayIcon = document.querySelector(".custom-play-btn i");
 
-      const zoomBtn = document.querySelector(".zoom-btn");
-      const zoomIcon = document.querySelector(".zoom-btn i");
+  const zoomBtn = document.querySelector(".zoom-btn");
+  const zoomIcon = document.querySelector(".zoom-btn i");
 
-      const progressBar = document.querySelector(".video-progress");
-      const currentTimeText = document.querySelector(".current-time");
-      const totalTimeText = document.querySelector(".total-time");
+  const progressBar = document.querySelector(".video-progress");
+  const currentTimeText = document.querySelector(".current-time");
+  const totalTimeText = document.querySelector(".total-time");
 
-      function updatePlayIcons(isPlaying) {
-        if (isPlaying) {
-          customPlayIcon.classList.remove("fa-play");
-          customPlayIcon.classList.add("fa-pause");
+  function updatePlayIcons(isPlaying) {
+    if (isPlaying) {
+      customPlayIcon.classList.remove("fa-play");
+      customPlayIcon.classList.add("fa-pause");
 
-          startVideoIcon.classList.remove("fa-play");
-          startVideoIcon.classList.add("fa-pause");
-        } else {
-          customPlayIcon.classList.remove("fa-pause");
-          customPlayIcon.classList.add("fa-play");
+      startVideoIcon.classList.remove("fa-play");
+      startVideoIcon.classList.add("fa-pause");
+    } else {
+      customPlayIcon.classList.remove("fa-pause");
+      customPlayIcon.classList.add("fa-play");
 
-          startVideoIcon.classList.remove("fa-pause");
-          startVideoIcon.classList.add("fa-play");
-        }
-      }
+      startVideoIcon.classList.remove("fa-pause");
+      startVideoIcon.classList.add("fa-play");
+    }
+  }
 
-      function openPopupVideo() {
-        videoPopup.classList.add("active");
+  function openPopupVideo() {
+    videoPopup.classList.add("active");
 
-        const startAt = 5;
+    const startAt = 0;
 
-        if (popupVideo.readyState >= 1) {
+    if (popupVideo.readyState >= 1) {
+      popupVideo.currentTime = startAt;
+      popupVideo.play();
+    } else {
+      popupVideo.addEventListener(
+        "loadedmetadata",
+        () => {
           popupVideo.currentTime = startAt;
           popupVideo.play();
-        } else {
-          popupVideo.addEventListener(
-            "loadedmetadata",
-            () => {
-              popupVideo.currentTime = startAt;
-              popupVideo.play();
-            },
-            { once: true },
-          );
-        }
+        },
+        { once: true },
+      );
+    }
 
-        updatePlayIcons(true);
-      }
+    progressBar.value = 0;
+    currentTimeText.textContent = "0:00";
 
-      function closePopupVideo() {
-        videoPopup.classList.remove("active");
+    updatePlayIcons(true);
+  }
 
-        popupVideo.pause();
-        popupVideo.currentTime = 5;
+  function closePopupVideo() {
+    videoPopup.classList.remove("active");
 
-        progressBar.value = 0;
-        currentTimeText.textContent = "0:05";
+    popupVideo.pause();
+    popupVideo.currentTime = 0;
 
-        popupVideoBox.classList.remove("zoomed");
+    progressBar.value = 0;
+    currentTimeText.textContent = "0:00";
 
-        zoomIcon.classList.remove("fa-compress");
-        zoomIcon.classList.add("fa-expand");
+    popupVideoBox.classList.remove("zoomed");
 
-        updatePlayIcons(false);
-      }
+    zoomIcon.classList.remove("fa-compress");
+    zoomIcon.classList.add("fa-expand");
 
-      function toggleVideoPlayPause() {
-        if (popupVideo.paused) {
-          popupVideo.play();
-          updatePlayIcons(true);
-        } else {
-          popupVideo.pause();
-          updatePlayIcons(false);
-        }
-      }
+    updatePlayIcons(false);
+  }
 
-      function updateProgress() {
-        const current = popupVideo.currentTime;
-        const duration = popupVideo.duration;
+  function toggleVideoPlayPause() {
+    if (popupVideo.paused) {
+      popupVideo.play();
+      updatePlayIcons(true);
+    } else {
+      popupVideo.pause();
+      updatePlayIcons(false);
+    }
+  }
 
-        if (duration > 0) {
-          progressBar.value = (current / duration) * 100;
-          currentTimeText.textContent = formatTime(current);
-          totalTimeText.textContent = formatTime(duration);
-        }
-      }
+  function updateProgress() {
+    const current = popupVideo.currentTime;
+    const duration = popupVideo.duration;
 
-      function formatTime(time) {
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60)
-          .toString()
-          .padStart(2, "0");
+    if (duration > 0) {
+      progressBar.value = (current / duration) * 100;
+      currentTimeText.textContent = formatTime(current);
+      totalTimeText.textContent = formatTime(duration);
+    }
+  }
 
-        return `${minutes}:${seconds}`;
-      }
+  function formatTime(time) {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60)
+      .toString()
+      .padStart(2, "0");
 
-      startVideoBtn.addEventListener("click", openPopupVideo);
+    return `${minutes}:${seconds}`;
+  }
 
-      customPlayBtn.addEventListener("click", toggleVideoPlayPause);
+  startVideoBtn.addEventListener("click", openPopupVideo);
 
-      videoClickLayer.addEventListener("click", toggleVideoPlayPause);
+  customPlayBtn.addEventListener("click", toggleVideoPlayPause);
 
-      videoCloseBtn.addEventListener("click", closePopupVideo);
+  videoClickLayer.addEventListener("click", toggleVideoPlayPause);
 
-      videoPopup.addEventListener("click", (e) => {
-        if (
-          e.target === videoPopup ||
-          e.target.classList.contains("video-blur-bg")
-        ) {
-          closePopupVideo();
-        }
-      });
+  videoCloseBtn.addEventListener("click", closePopupVideo);
 
-      popupVideo.addEventListener("timeupdate", updateProgress);
+  videoPopup.addEventListener("click", (e) => {
+    if (
+      e.target === videoPopup ||
+      e.target.classList.contains("video-blur-bg")
+    ) {
+      closePopupVideo();
+    }
+  });
 
-      popupVideo.addEventListener("loadedmetadata", () => {
-        totalTimeText.textContent = formatTime(popupVideo.duration);
-      });
+  popupVideo.addEventListener("timeupdate", updateProgress);
 
-      popupVideo.addEventListener("play", () => {
-        updatePlayIcons(true);
-      });
+  popupVideo.addEventListener("loadedmetadata", () => {
+    totalTimeText.textContent = formatTime(popupVideo.duration);
+  });
 
-      popupVideo.addEventListener("pause", () => {
-        updatePlayIcons(false);
-      });
+  popupVideo.addEventListener("play", () => {
+    updatePlayIcons(true);
+  });
 
-      popupVideo.addEventListener("ended", () => {
-        updatePlayIcons(false);
-        progressBar.value = 100;
-      });
+  popupVideo.addEventListener("pause", () => {
+    updatePlayIcons(false);
+  });
 
-      progressBar.addEventListener("mousedown", (e) => e.preventDefault());
-      progressBar.addEventListener("touchstart", (e) => e.preventDefault());
-      progressBar.addEventListener("keydown", (e) => e.preventDefault());
+  popupVideo.addEventListener("ended", () => {
+    updatePlayIcons(false);
+    progressBar.value = 100;
+  });
 
-      zoomBtn.addEventListener("click", () => {
-        popupVideoBox.classList.toggle("zoomed");
+  progressBar.addEventListener("mousedown", (e) => e.preventDefault());
+  progressBar.addEventListener("touchstart", (e) => e.preventDefault());
+  progressBar.addEventListener("keydown", (e) => e.preventDefault());
 
-        if (popupVideoBox.classList.contains("zoomed")) {
-          zoomIcon.classList.remove("fa-expand");
-          zoomIcon.classList.add("fa-compress");
-        } else {
-          zoomIcon.classList.remove("fa-compress");
-          zoomIcon.classList.add("fa-expand");
-        }
-      });
-    </script>
+  zoomBtn.addEventListener("click", () => {
+    popupVideoBox.classList.toggle("zoomed");
+
+    if (popupVideoBox.classList.contains("zoomed")) {
+      zoomIcon.classList.remove("fa-expand");
+      zoomIcon.classList.add("fa-compress");
+    } else {
+      zoomIcon.classList.remove("fa-compress");
+      zoomIcon.classList.add("fa-expand");
+    }
+  });
+</script>
 
     <script src="./assets/js/app.js"></script>
   </body>
