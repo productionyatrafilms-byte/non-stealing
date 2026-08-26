@@ -90,6 +90,14 @@
       display: block;
       font-weight: bolder !important;
     }
+
+    body[data-lang="hi"] .page-title span {
+      font-family: "ITFDevanagari";
+    }
+
+    body[data-lang="gu"] .page-title span {
+      font-family: "NotoSansGujaratiRegular";
+    }
   </style>
 
   <body class="intro-active">
@@ -257,21 +265,31 @@
     </main>
 
     <script src="./assets/js/app.js"></script>
+    <script src="./assets/js/djp.js"></script>
 
     <script>
       const pageTitle = document.querySelector(".page-title");
+      const introSound = new Audio("./assets/audio/transition/2.mp3");
 
       pageTitle.addEventListener("click", function () {
         if (document.body.classList.contains("intro-done")) return;
+
+        introSound.currentTime = 0;
+        introSound.play().catch(() => {});
 
         document.body.classList.add("intro-done");
         document.body.classList.add("bg-change");
         document.body.classList.remove("intro-active");
       });
 
+      const subPointSound = new Audio("./assets/audio/pop.mp3");
+
       document.querySelectorAll(".col a").forEach(function (link) {
         link.addEventListener("click", function (e) {
           e.preventDefault();
+
+          subPointSound.currentTime = 0;
+          subPointSound.play().catch(() => {});
 
           const col = link.closest(".col");
           const href = link.getAttribute("href");

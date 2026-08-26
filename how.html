@@ -34,6 +34,14 @@
         display: block;
         font-weight: bolder !important;
       }
+
+      body[data-lang="hi"] .page-title span {
+        font-family: "ITFDevanagari";
+      }
+
+      body[data-lang="gu"] .page-title span {
+        font-family: "NotoSansGujaratiRegular";
+      }
     </style>
   </head>
 
@@ -76,9 +84,6 @@
             <div class="swiper-slide">
               <video src="./assets/videos/5-4.mp4" muted playsinline></video>
             </div>
-            <div class="swiper-slide">
-              <video src="./assets/videos/5-5.mp4" muted playsinline></video>
-            </div>
           </div>
         </div>
 
@@ -106,9 +111,6 @@
             <div class="swiper-slide">
               <p data-lang-key="slide-5.4"></p>
             </div>
-            <div class="swiper-slide">
-              <p data-lang-key="slide-5.5"></p>
-            </div>
           </div>
         </div>
       </div>
@@ -119,7 +121,7 @@
     <script>
       const prevBtn = document.querySelector(".prev-btn");
       const nextBtn = document.querySelector(".next-btn");
-      const LAST_SLIDE_INDEX = 4;
+      const LAST_SLIDE_INDEX = 3;
 
       const videoSwiper = new Swiper(".video-swiper", {
         slidesPerView: 1,
@@ -181,5 +183,6 @@
     </script>
 
     <script src="./assets/js/app.js"></script>
+    <script src="./assets/js/djp.js"></script>
   </body>
 </html>

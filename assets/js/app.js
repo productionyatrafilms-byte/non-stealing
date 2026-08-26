@@ -83,3 +83,83 @@ if (btnHi) {
 if (btnGu) {
   btnGu.addEventListener("click", () => applyLanguage("Gujarati"));
 }
+
+// ---- Sound effects ----
+const soundCache = {};
+
+function playSound(src) {
+  let audio = soundCache[src];
+  if (!audio) {
+    audio = new Audio(src);
+    soundCache[src] = audio;
+  }
+  audio.currentTime = 0;
+  audio.play().catch(() => {});
+}
+
+// Play a sound, then follow the link once it's had time to start
+function navigateWithSound(link, soundSrc, delay) {
+  link.addEventListener("click", function (e) {
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#")) return;
+
+    e.preventDefault();
+    playSound(soundSrc);
+
+    setTimeout(function () {
+      window.location.href = href;
+    }, delay);
+  });
+}
+
+// Language toggle buttons -> per-language voice clip
+const langAudio = {
+  English: "./assets/audio/Eng.mpeg",
+  Hindi: "./assets/audio/Hin.mpeg",
+  Gujarati: "./assets/audio/Guj.mpeg",
+};
+
+if (btnEn) btnEn.addEventListener("click", () => playSound(langAudio.English));
+if (btnHi) btnHi.addEventListener("click", () => playSound(langAudio.Hindi));
+if (btnGu) btnGu.addEventListener("click", () => playSound(langAudio.Gujarati));
+
+// Home / back buttons -> click.mp3
+document.querySelectorAll(".home-button, .home-btn-1, .back-btn").forEach((link) => {
+  navigateWithSound(link, "./assets/audio/click.mp3", 200);
+});
+
+// Sub-point navigation (the 5 topic pages) -> pop.mp3
+document.querySelectorAll(".pages .page").forEach((link) => {
+  navigateWithSound(link, "./assets/audio/pop.mp3", 200);
+});
+
+// Swiper prev/next controls -> swiper.mp3
+document.querySelectorAll(".prev-btn, .next-btn").forEach((btn) => {
+  btn.addEventListener("click", () => playSound("./assets/audio/swiper.mp3"));
+});
+
+// Pranam page -> play pranam.mp3 once on arrival
+// (falls back to the first interaction if the browser blocks autoplay)
+if (document.querySelector(".pranam-container")) {
+  const pranamAudio = new Audio("./assets/audio/pranam.mp3");
+
+  function playPranamOnce() {
+    pranamAudio.currentTime = 0;
+    const playPromise = pranamAudio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        const retry = () => {
+          document.removeEventListener("click", retry);
+          document.removeEventListener("keydown", retry);
+          document.removeEventListener("touchstart", retry);
+          playPranamOnce();
+        };
+        document.addEventListener("click", retry, { once: true });
+        document.addEventListener("keydown", retry, { once: true });
+        document.addEventListener("touchstart", retry, { once: true });
+      });
+    }
+  }
+
+  playPranamOnce();
+}
