@@ -7,7 +7,7 @@
 
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+      href="./assets/css/swiper-bundle.min.css"
     />
     <link rel="stylesheet" href="./assets/css/style.css" />
 
@@ -48,6 +48,11 @@
   <body>
     <a class="home-button home-btn" href="index.html">
       <img src="./assets/images/home-btn.png" alt="" />
+    </a>
+
+    <a href="pranam.html" class="pranam-link hidden">
+      <img src="./assets/images/arowAsset.png" alt="" />
+      <span data-lang-key="pranam"></span>
     </a>
 
     <div class="page-title">
@@ -116,11 +121,12 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="./assets/js/swiper-bundle.min.js"></script>
 
     <script>
       const prevBtn = document.querySelector(".prev-btn");
       const nextBtn = document.querySelector(".next-btn");
+      const pranamLink = document.querySelector(".pranam-link");
       const LAST_SLIDE_INDEX = 3;
 
       const videoSwiper = new Swiper(".video-swiper", {
@@ -155,15 +161,17 @@
 
       function updateButtons() {
         prevBtn.style.display = videoSwiper.activeIndex === 0 ? "none" : "flex";
-        nextBtn.style.display = "flex";
+
+        if (videoSwiper.activeIndex === LAST_SLIDE_INDEX) {
+          nextBtn.style.display = "none";
+          pranamLink.classList.remove("hidden");
+        } else {
+          nextBtn.style.display = "flex";
+          pranamLink.classList.add("hidden");
+        }
       }
 
       nextBtn.addEventListener("click", () => {
-        if (videoSwiper.activeIndex === LAST_SLIDE_INDEX) {
-          window.location.href = "pranam.html";
-          return;
-        }
-
         videoSwiper.slideNext();
         contentSwiper.slideNext();
       });

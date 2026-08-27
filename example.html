@@ -7,12 +7,7 @@
 
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      href="./assets/css/swiper-bundle.min.css"
     />
 
     <link rel="stylesheet" href="./assets/css/style.css" />
@@ -180,6 +175,11 @@
         background: transparent !important;
       }
 
+      .popup-video-wrapper {
+        position: relative;
+        display: inline-flex;
+      }
+
       .popup-video-box {
         position: relative;
         width: 62vw;
@@ -216,16 +216,13 @@
 
       .video-close-btn {
         position: absolute;
-        top: 7%;
-        right: 15%;
+        top: -1.35vw;
+        right: -1.35vw;
         z-index: 10;
-        width: 3vw;
-        height: 3vw;
-        border-radius: 50%;
+        width: 2vw;
+        height: 2vw;
         border: none;
-        background: #fff;
-        color: #7b1600;
-        font-size: 1.6vw;
+        background: transparent;
         cursor: pointer;
       }
 
@@ -246,6 +243,22 @@
         background: rgba(0, 0, 0, 0.65);
         backdrop-filter: blur(0.4vw);
         -webkit-backdrop-filter: blur(0.4vw);
+      }
+
+      .play-circle img,
+      .custom-play-btn img,
+      .zoom-btn img {
+        width: 55%;
+        height: 55%;
+        object-fit: contain;
+        display: block;
+      }
+
+      .video-close-btn img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
       }
 
       .custom-play-btn,
@@ -293,7 +306,7 @@
     <div class="video-btn">
       <button class="start-video-btn">
         <span class="play-circle">
-          <i class="fa-solid fa-play"></i>
+          <img src="./assets/images/play.png" alt="" />
         </span>
         <span>START</span>
       </button>
@@ -317,41 +330,43 @@
       <div class="video-popup">
         <div class="video-blur-bg"></div>
 
-        <button class="video-close-btn">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <div class="popup-video-wrapper">
+          <button class="video-close-btn">
+            <img src="./assets/images/close.png" alt="" />
+          </button>
 
-        <div class="popup-video-box">
-          <video
-            class="popup-video"
-            src="./assets/videos/topic-2.webm"
-            playsinline
-          ></video>
+          <div class="popup-video-box">
+            <video
+              class="popup-video"
+              src="./assets/videos/topic-2.webm"
+              playsinline
+            ></video>
 
-          <div class="video-click-layer"></div>
+            <div class="video-click-layer"></div>
 
-          <div class="custom-video-controls">
-            <button class="custom-play-btn">
-              <i class="fa-solid fa-play"></i>
-            </button>
+            <div class="custom-video-controls">
+              <button class="custom-play-btn">
+                <img src="./assets/images/play.png" alt="" />
+              </button>
 
-            <span class="video-time current-time">0:00</span>
+              <span class="video-time current-time">0:00</span>
 
-            <input
-              type="range"
-              class="video-progress"
-              min="0"
-              max="100"
-              value="0"
-              tabindex="-1"
-              aria-disabled="true"
-            />
+              <input
+                type="range"
+                class="video-progress"
+                min="0"
+                max="100"
+                value="0"
+                tabindex="-1"
+                aria-disabled="true"
+              />
 
-            <span class="video-time total-time">0:00</span>
+              <span class="video-time total-time">0:00</span>
 
-            <button class="zoom-btn">
-              <i class="fa-solid fa-expand"></i>
-            </button>
+              <button class="zoom-btn">
+                <img src="./assets/images/expand.png" alt="" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -419,11 +434,12 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="./assets/js/swiper-bundle.min.js"></script>
 
     <script>
   const prevBtn = document.querySelector(".prev-btn");
   const nextBtn = document.querySelector(".next-btn");
+  const videoBtn = document.querySelector(".video-btn");
 
   const videoSwiper = new Swiper(".video-swiper", {
     slidesPerView: 1,
@@ -461,6 +477,7 @@
   function updateButtons() {
     prevBtn.style.display = videoSwiper.activeIndex === 0 ? "none" : "flex";
     nextBtn.style.display = videoSwiper.activeIndex === 9 ? "none" : "flex";
+    videoBtn.style.display = videoSwiper.activeIndex === 0 ? "block" : "none";
   }
 
   nextBtn.addEventListener("click", () => {
@@ -482,7 +499,7 @@
   playActiveVideo();
 
   const startVideoBtn = document.querySelector(".start-video-btn");
-  const startVideoIcon = document.querySelector(".start-video-btn i");
+  const startVideoIcon = document.querySelector(".start-video-btn img");
   const videoPopup = document.querySelector(".video-popup");
   const videoCloseBtn = document.querySelector(".video-close-btn");
 
@@ -491,10 +508,10 @@
   const videoClickLayer = document.querySelector(".video-click-layer");
 
   const customPlayBtn = document.querySelector(".custom-play-btn");
-  const customPlayIcon = document.querySelector(".custom-play-btn i");
+  const customPlayIcon = document.querySelector(".custom-play-btn img");
 
   const zoomBtn = document.querySelector(".zoom-btn");
-  const zoomIcon = document.querySelector(".zoom-btn i");
+  const zoomIcon = document.querySelector(".zoom-btn img");
 
   const progressBar = document.querySelector(".video-progress");
   const currentTimeText = document.querySelector(".current-time");
@@ -502,17 +519,11 @@
 
   function updatePlayIcons(isPlaying) {
     if (isPlaying) {
-      customPlayIcon.classList.remove("fa-play");
-      customPlayIcon.classList.add("fa-pause");
-
-      startVideoIcon.classList.remove("fa-play");
-      startVideoIcon.classList.add("fa-pause");
+      customPlayIcon.src = "./assets/images/pause.png";
+      startVideoIcon.src = "./assets/images/pause.png";
     } else {
-      customPlayIcon.classList.remove("fa-pause");
-      customPlayIcon.classList.add("fa-play");
-
-      startVideoIcon.classList.remove("fa-pause");
-      startVideoIcon.classList.add("fa-play");
+      customPlayIcon.src = "./assets/images/play.png";
+      startVideoIcon.src = "./assets/images/play.png";
     }
   }
 
@@ -552,8 +563,7 @@
 
     popupVideoBox.classList.remove("zoomed");
 
-    zoomIcon.classList.remove("fa-compress");
-    zoomIcon.classList.add("fa-expand");
+    zoomIcon.src = "./assets/images/expand.png";
 
     updatePlayIcons(false);
   }
@@ -632,11 +642,9 @@
     popupVideoBox.classList.toggle("zoomed");
 
     if (popupVideoBox.classList.contains("zoomed")) {
-      zoomIcon.classList.remove("fa-expand");
-      zoomIcon.classList.add("fa-compress");
+      zoomIcon.src = "./assets/images/shrink.png";
     } else {
-      zoomIcon.classList.remove("fa-compress");
-      zoomIcon.classList.add("fa-expand");
+      zoomIcon.src = "./assets/images/expand.png";
     }
   });
 </script>
