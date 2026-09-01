@@ -605,6 +605,7 @@ body[data-lang="gu"] .content-swiper p {
 }
 
 .page {
+  position: relative;
   text-decoration: none;
   width: 3.3vw;
   height: 3.3vw;
@@ -631,6 +632,66 @@ body[data-lang="gu"] .content-swiper p {
 .active {
   background-color: #ffe137;
   color: #6563c1;
+}
+
+.page-number {
+  pointer-events: none;
+}
+
+.page-hover-title {
+  position: absolute;
+  left: calc(100% + 0.8vw);
+  top: 50%;
+  transform: translateY(-50%) translateX(-0.4vw);
+  width: max-content;
+  max-width: 16vw;
+  padding: 0.35vw 0.8vw;
+  background-color: #ffffff;
+  color: #6563c1;
+  border-radius: 0.6vw;
+  font-family: "BalooRegular";
+  font-size: 1vw;
+  line-height: 1.2;
+  text-align: center;
+  white-space: normal;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 9999;
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s ease,
+    transform 0.25s ease;
+  box-shadow: 0 0.1vw 0.1vw rgba(0, 0, 0, 0.2);
+}
+
+.page-hover-title::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  transform: translateY(-50%);
+  border-top: 0.4vw solid transparent;
+  border-bottom: 0.4vw solid transparent;
+  border-right: 0.4vw solid #ffffff;
+}
+
+.page:hover .page-hover-title {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+body[data-lang="hi"] .page-hover-title {
+  font-family: "ITFDevanagari";
+  font-size: 1vw;
+  line-height: 1.4;
+}
+
+body[data-lang="gu"] .page-hover-title {
+  font-family: "NotoSansGujaratiRegular";
+  font-size: 1vw;
+  line-height: 1.4;
 }
 
 /* Pranam container */

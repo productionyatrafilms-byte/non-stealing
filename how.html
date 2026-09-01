@@ -67,27 +67,42 @@
 
     <div class="swiper-container">
       <div class="pages">
-        <a class="page" data-lang-key="num.1" href="what.html"></a>
-        <a class="page" data-lang-key="num.2" href="example.html"></a>
-        <a class="page" data-lang-key="num.3" href="disadvantages.html"></a>
-        <a class="page" data-lang-key="num.4" href="why.html"></a>
-        <a class="page active" data-lang-key="num.5" href="how.html"></a>
+        <a class="page" href="what.html">
+          <span class="page-number" data-lang-key="num.1"></span>
+          <span class="page-hover-title" data-lang-key="title-1"></span>
+        </a>
+        <a class="page" href="example.html">
+          <span class="page-number" data-lang-key="num.2"></span>
+          <span class="page-hover-title" data-lang-key="title-2"></span>
+        </a>
+        <a class="page" href="disadvantages.html">
+          <span class="page-number" data-lang-key="num.3"></span>
+          <span class="page-hover-title" data-lang-key="title-3"></span>
+        </a>
+        <a class="page" href="why.html">
+          <span class="page-number" data-lang-key="num.4"></span>
+          <span class="page-hover-title" data-lang-key="title-4"></span>
+        </a>
+        <a class="page active" href="how.html">
+          <span class="page-number" data-lang-key="num.5"></span>
+          <span class="page-hover-title" data-lang-key="title-5"></span>
+        </a>
       </div>
 
       <div class="video-wrapper">
         <div class="swiper video-swiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide">
-              <video src="./assets/videos/5-1.mp4" muted playsinline></video>
+              <video src="./assets/videos/5-1.mp4" muted loop playsinline></video>
             </div>
             <div class="swiper-slide">
-              <video src="./assets/videos/5-2.mp4" muted playsinline></video>
+              <video src="./assets/videos/5-2.mp4" muted loop playsinline></video>
             </div>
             <div class="swiper-slide">
-              <video src="./assets/videos/5-3.mp4" muted playsinline></video>
+              <video src="./assets/videos/5-3.mp4" muted loop playsinline></video>
             </div>
             <div class="swiper-slide">
-              <video src="./assets/videos/5-4.mp4" muted playsinline></video>
+              <video src="./assets/videos/5-4.mp4" muted loop playsinline></video>
             </div>
           </div>
         </div>
@@ -190,7 +205,8 @@
       playActiveVideo();
     </script>
 
-    <script src="./assets/js/app.js"></script>
+    <script src="./assets/js/data.js"></script>
+<script src="./assets/js/app.js"></script>
     <script src="./assets/js/djp.js"></script>
   </body>
 </html>

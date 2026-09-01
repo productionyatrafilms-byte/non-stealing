@@ -51,26 +51,21 @@ function isPageRefresh() {
 
 // load language
 window.addEventListener("DOMContentLoaded", () => {
-  fetch("./assets/json/data.json")
-    .then((res) => res.json())
-    .then((data) => {
-      translations = data;
+  translations = typeof data !== "undefined" ? data : {};
 
-      let langToApply = DEFAULT_LANG;
-      const savedLang = localStorage.getItem(STORAGE_KEY);
+  let langToApply = DEFAULT_LANG;
+  const savedLang = localStorage.getItem(STORAGE_KEY);
 
-      if (isPageRefresh()) {
-        // on refresh always reset to English
-        langToApply = DEFAULT_LANG;
-        localStorage.setItem(STORAGE_KEY, DEFAULT_LANG);
-      } else {
-        // on normal page load / navigation keep selected language
-        langToApply = savedLang || DEFAULT_LANG;
-      }
+  if (isPageRefresh()) {
+    // on refresh always reset to English
+    langToApply = DEFAULT_LANG;
+    localStorage.setItem(STORAGE_KEY, DEFAULT_LANG);
+  } else {
+    // on normal page load / navigation keep selected language
+    langToApply = savedLang || DEFAULT_LANG;
+  }
 
-      applyLanguage(langToApply);
-    })
-    .catch((err) => console.error("Error loading translations:", err));
+  applyLanguage(langToApply);
 });
 
 // button clicks
