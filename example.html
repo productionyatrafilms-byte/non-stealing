@@ -613,6 +613,14 @@
     return `${minutes}:${seconds}`;
   }
 
+  function seekVideoToProgress() {
+    const duration = popupVideo.duration;
+
+    if (!duration || duration <= 0) return;
+
+    popupVideo.currentTime = (Number(progressBar.value) / 100) * duration;
+  }
+
   startVideoBtn.addEventListener("click", openPopupVideo);
 
   customPlayBtn.addEventListener("click", toggleVideoPlayPause);
@@ -649,9 +657,8 @@
     progressBar.value = 100;
   });
 
-  progressBar.addEventListener("mousedown", (e) => e.preventDefault());
-  progressBar.addEventListener("touchstart", (e) => e.preventDefault());
-  progressBar.addEventListener("keydown", (e) => e.preventDefault());
+  progressBar.addEventListener("input", seekVideoToProgress);
+  progressBar.addEventListener("change", seekVideoToProgress);
 
   zoomBtn.addEventListener("click", () => {
     popupVideoBox.classList.toggle("zoomed");
