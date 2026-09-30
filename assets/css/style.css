@@ -59,19 +59,32 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 body {
   width: 100vw !important;
   height: 100%;
-  background-image: url("../images/bg-img.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
-  overflow-x: hidden;
+  overflow: hidden;
   opacity: 1;
   transition: opacity 0.5s ease;
+}
+
+/* Shared full-page video background (assets/videos/bg.mp4), used on every
+   page instead of the static bg-img.png this replaces. A real <video>
+   element competes in the normal stacking order (unlike a CSS
+   background-image, which always paints behind everything no matter what),
+   so it's pushed far enough negative to stay below every other element on
+   any page, including ones with their own negative z-index effects (e.g.
+   index.html's black-oval hover effect at z-index:-10). */
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -100;
 }
 
 .home-btn {
@@ -193,8 +206,21 @@ body {
 .col:hover .black-ovel,
 .col.anim-front-down .black-ovel,
 .col.anim-swap .black-ovel,
-.col.anim-up .black-ovel {
+.col.anim-up .black-ovel,
+.col.col-5.anim-5-hand-up .black-ovel,
+.col.col-5.anim-5-swap .black-ovel,
+.col.col-5.anim-5-descend .black-ovel {
   opacity: 1 !important;
+}
+
+/* Column 5's hand rises up from below (reversed direction from the other
+   columns), so during the click animation the oval sits at the bottom of
+   the column, where the hand emerges from. On plain hover it keeps the
+   shared top:18% so it lines up with the other columns. */
+.col.col-5.anim-5-hand-up .black-ovel,
+.col.col-5.anim-5-swap .black-ovel,
+.col.col-5.anim-5-descend .black-ovel {
+  top: 148%;
 }
 
 /* Hand wrapper clips the hand, so it looks like coming from black oval */
@@ -277,6 +303,158 @@ body {
   width: 15vw;
   height: 15vw;
   background: url("../images/topic-hov.png") center / contain no-repeat;
+}
+
+/* 5th topic button uses its own coin art and text color. Its background is
+   cleared (both states) since .col a / .col a:hover both set a shared
+   topic.png / topic-hov.png background further up — left in place, that
+   would keep showing through behind/around coin-5, especially once it's
+   thinner mid-flip. */
+.col.col-5 a,
+.col.col-5 a:hover {
+  background: none;
+}
+
+.col.col-5 a div {
+  color: #9D360E;
+  animation: text-5-flip 10s ease-in-out infinite;
+}
+
+/* Number and text turn with the coin (same 10s cycle, same 40-50% and
+   90-100% flip windows) so they look like they're printed on it. They turn
+   edge-on at each flip's midpoint (45% / 95%, where the coin is at 90deg),
+   then come out the other side already facing forward — so the "back" of
+   the coin shows readable text instead of a mirror image. */
+@keyframes text-5-flip {
+  0%,
+  40% {
+    transform: perspective(60vw) rotateY(0deg);
+  }
+  45% {
+    transform: perspective(60vw) rotateY(90deg);
+  }
+  45.01% {
+    transform: perspective(60vw) rotateY(-90deg);
+  }
+  50%,
+  90% {
+    transform: perspective(60vw) rotateY(0deg);
+  }
+  95% {
+    transform: perspective(60vw) rotateY(90deg);
+  }
+  95.01% {
+    transform: perspective(60vw) rotateY(-90deg);
+  }
+  100% {
+    transform: perspective(60vw) rotateY(0deg);
+  }
+}
+
+/* Coin art as a real <img> (not a CSS background like the other buttons)
+   so it alone can be flipped, without dragging the number/text labels
+   through the rotation with it. Sits behind those labels (z-index 0 vs
+   their z-index:2), filling the button the same way the background did. */
+.coin-5 {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 0;
+  animation: coin-5-flip 10s ease-in-out infinite;
+}
+
+/* One flip per turn, never reversed back — each flip is a single 180deg
+   turn, taking 2.5s, with a 2.5s hold before and after. The second flip
+   continues on to 360deg (not back to 0deg), so the loop restart at 0%
+   next cycle lands on the same visual state with no snap-back, instead of
+   looking like it flips there and immediately flips back (two flips). */
+/* 4s hold, then a 1s flip, on a 10s total cycle: 0-40% hold, 40-50% flip,
+   50-90% hold, 90-100% flip. */
+@keyframes coin-5-flip {
+  0%,
+  40% {
+    transform: perspective(60vw) rotateY(0deg);
+  }
+  50%,
+  90% {
+    transform: perspective(60vw) rotateY(180deg);
+  }
+  100% {
+    transform: perspective(60vw) rotateY(360deg);
+  }
+}
+
+/* Sparkle accent near the coin — only pulses while the coin flips (same 5s
+   cycle, same active window as coin-5-flip above), not on its own separate
+   loop. */
+.shine-5 {
+  position: absolute;
+  top: 12%;
+  right: 10%;
+  width: 10%;
+  z-index: 1;
+  pointer-events: none;
+  animation: shine-5-pulse 10s ease-in-out infinite;
+}
+
+/* Same 10s cycle as coin-5-flip, peaking once during each of its two
+   flips (centered on 45% and 95%, the midpoint of each flip window). */
+@keyframes shine-5-pulse {
+  0%,
+  40% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.4);
+  }
+  50%,
+  90% {
+    transform: scale(1);
+  }
+  95% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Spotlight beam shining down onto the button, only shown on hover. A
+   sibling of the button (not nested inside it) on purpose: .col a has
+   z-index:1000 !important, which establishes its own stacking context — any
+   descendant of it, regardless of its own z-index, would paint above the
+   hand/black-oval animation, which isn't what we want here. Living outside
+   the button lets its z-index be compared directly against the oval (-10)
+   and hand layers (15) — set above the oval (per request) but still below
+   the hands, so those still appear on top of it when they animate down. */
+.col .flash {
+  position: absolute;
+  left: 50%;
+  bottom: 21%;
+  transform: translateX(-50%);
+  width: 150%;
+  height: 96%;
+  object-fit: contain;
+  object-position: bottom;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: -5;
+}
+
+.col:hover .flash {
+  opacity: 1;
+}
+
+/* Column 5 shows no flash beam once clicked — the pointer is still hovering
+   the column during the animation, so this needs !important to beat the
+   hover rule above. */
+.col.col-5.anim-5-hand-up .flash,
+.col.col-5.anim-5-swap .flash,
+.col.col-5.anim-5-descend .flash {
+  opacity: 0 !important;
 }
 
 .col a div {
@@ -446,6 +624,148 @@ body.intro-done .col.anim-up a {
 .col.anim-up .thumb {
   animation: thumbUp 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
+/* Column 5's click animation is its own thing (see the col5Link handler in
+   index.html): hand-back rises up from below with the coin, swaps to
+   hand-front once risen, then hand-front + coin descend back down
+   together. Its hand art is mirrored vertically to match that reversed
+   (bottom-up, not top-down) motion. */
+.col-5 .hands .hand-wrapper .hand-back .hand-back-1 {
+  /* hand-front centers itself (left:50% + translateX(-50%) live on that
+     same element), but hand-back-1 is nested inside .hand-back instead —
+     widening it past 100% would overflow to one side in normal flow
+     without its own centering to match. */
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%) scaleY(-1);
+}
+
+.col-5 .hands .hand-wrapper .hand-back .hand-back-1,
+.col-5 .hands .hand-wrapper .hand-front {
+  /* hand-back.png and hand-front.png aren't the same proportions — at a
+     shared width:100% their auto-height differs, so even with identical
+     `top` the two don't line up: the shorter one (hand-front) visibly
+     "lifts" away from the coin instead of touching it like hand-back does.
+     Forcing a common height alone isn't enough: both images are "tall"
+     relative to their width, so object-fit:contain was already fitting
+     them by width — a taller box just added empty space rather than
+     stretching the shorter image, since contain never enlarges past the
+     tightest-fitting dimension. Widening the box past 100% pushes the
+     width-fit size beyond the target height, which flips contain over to
+     fitting by height instead — so both images now actually render at the
+     same height (anchored to the bottom, where the fingers are in the
+     source art, before the mirror above flips that to the top), instead
+     of just occupying the same bounding box. */
+  width: 130%;
+  height: 27.3vw;
+  object-fit: contain;
+  object-position: bottom;
+}
+
+/* .hand-front is both the positioned element and the image, so its own
+   translateX(-50%) centering has to be kept alongside the mirror above. */
+.col-5 .hands .hand-wrapper .hand-front {
+  transform: translateX(-50%) scaleY(-1);
+}
+
+/* For column 5 only, the hand should render in front of the coin (the
+   other columns' coin art is just a flat background image behind the
+   hand, but col-5's coin is a real element at z-index:1000 inside .col
+   a). 1001 beats that. */
+.col-5 .hands .hand-wrapper .hand-back,
+.col-5 .hands .hand-wrapper .hand-back .hand-back-1,
+.col-5 .hands .hand-wrapper .hand-front {
+  z-index: 1001;
+}
+
+/* Step 1: hand-back alone rises into place from below. The coin never
+   moves at all in this version — just the hand entering, swapping, and
+   retreating. */
+@keyframes handBackRise5 {
+  0% {
+    top: 100%;
+    opacity: 1;
+  }
+
+  100% {
+    top: 26%;
+    opacity: 1;
+  }
+}
+
+/* Coin rises together with the hand this time (same class, same 1s
+   duration), stopping wherever the hand stops (top:26%, matching
+   handBackRise5's own end point above) instead of running as its own
+   separate step. */
+@keyframes linkRise5 {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(0, -140%, 0);
+  }
+}
+
+.col.col-5.anim-5-hand-up .hands .hand-wrapper .hand-back {
+  opacity: 1;
+  animation: handBackRise5 1s ease forwards;
+}
+
+.col.col-5.anim-5-hand-up a {
+  animation: linkRise5 1s ease forwards !important;
+  pointer-events: none;
+}
+
+/* Step 2: instant swap, once risen — hand-back out, hand-front in, coin
+   held at its risen position */
+.col.col-5.anim-5-swap .hands .hand-wrapper .hand-back {
+  opacity: 0 !important;
+}
+
+.col.col-5.anim-5-swap .hands .hand-wrapper .hand-front {
+  opacity: 1;
+  top: 26%;
+}
+
+.col.col-5.anim-5-swap a {
+  transform: translate3d(0, -140%, 0) !important;
+  pointer-events: none;
+}
+
+/* Step 3: hand-front + coin come back down together */
+@keyframes handFrontDescend5 {
+  0% {
+    top: 26%;
+    opacity: 1;
+  }
+
+  100% {
+    top: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes linkDescend5 {
+  0% {
+    transform: translate3d(0, -140%, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.col.col-5.anim-5-descend .hands .hand-wrapper .hand-front {
+  opacity: 1;
+  animation: handFrontDescend5 1s ease forwards;
+}
+
+.col.col-5.anim-5-descend a {
+  animation: linkDescend5 1s ease forwards !important;
+  pointer-events: none;
+}
+
 /* Swiper container */
 .swiper-container {
   position: relative;

@@ -8,13 +8,6 @@
   </head>
 
   <style>
-    body {
-      background-image: url("./assets/images/bg-img.png");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      transition: background-image 0.8s ease;
-    }
 
     main {
       position: relative;
@@ -39,10 +32,6 @@
       transition:
         opacity 0.8s ease,
         visibility 0.8s ease;
-    }
-
-    body.bg-change {
-      background-image: url("./assets/images/bg-img-1.png");
     }
 
     .page-title {
@@ -100,6 +89,10 @@
   </style>
 
   <body class="intro-active">
+    <video class="bg-video" autoplay muted loop playsinline>
+      <source src="./assets/videos/bg.mp4" type="video/mp4" />
+    </video>
+
     <a class="home-button home-btn" href="index.html">
       <img src="./assets/images/home-btn.png" alt="" />
     </a>
@@ -139,6 +132,8 @@
 
           <img class="thumb" src="./assets/images/thumb.png" alt="" />
 
+          <img class="flash" src="./assets/images/flash.png" alt="" />
+
           <a href="what.html">
             <div class="num" data-lang-key="num-1"></div>
             <div class="text" data-lang-key="title-1"></div>
@@ -167,6 +162,8 @@
           </div>
 
           <img class="thumb" src="./assets/images/thumb.png" alt="" />
+
+          <img class="flash" src="./assets/images/flash.png" alt="" />
 
           <a href="example.html">
             <div class="num" data-lang-key="num-2"></div>
@@ -197,6 +194,8 @@
 
           <img class="thumb" src="./assets/images/thumb.png" alt="" />
 
+          <img class="flash" src="./assets/images/flash.png" alt="" />
+
           <a href="disadvantages.html">
             <div class="num" data-lang-key="num-3"></div>
             <div class="text" data-lang-key="title-3"></div>
@@ -225,6 +224,8 @@
           </div>
 
           <img class="thumb" src="./assets/images/thumb.png" alt="" />
+
+          <img class="flash" src="./assets/images/flash.png" alt="" />
 
           <a href="why.html">
             <div class="num" data-lang-key="num-4"></div>
@@ -255,7 +256,11 @@
 
           <img class="thumb" src="./assets/images/thumb.png" alt="" />
 
+          <img class="flash" src="./assets/images/flash.png" alt="" />
+
           <a href="how.html">
+            <img class="coin-5" src="./assets/images/5.png" alt="" />
+            <img class="shine-5" src="./assets/images/shine.png" alt="" />
             <div class="num" data-lang-key="num-5"></div>
             <div class="text" data-lang-key="title-5"></div>
           </a>
@@ -278,13 +283,12 @@
         introSound.play().catch(() => {});
 
         document.body.classList.add("intro-done");
-        document.body.classList.add("bg-change");
         document.body.classList.remove("intro-active");
       });
 
       const subPointSound = new Audio("./assets/audio/pop.mp3");
 
-      document.querySelectorAll(".col a").forEach(function (link) {
+      document.querySelectorAll(".col:not(.col-5) a").forEach(function (link) {
         link.addEventListener("click", function (e) {
           e.preventDefault();
 
@@ -327,6 +331,44 @@
           }, 1000);
         });
       });
+
+      // Column 5 has its own click animation instead of the shared one
+      // above: hand-back rises up from below together with the coin,
+      // swaps to hand-front once both are up, then hand-front + coin
+      // descend back down together before navigating (see .anim-5-* rules
+      // in style.css).
+      const col5Link = document.querySelector(".col-5 a");
+
+      if (col5Link) {
+        col5Link.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          subPointSound.currentTime = 0;
+          subPointSound.play().catch(() => {});
+
+          const col = col5Link.closest(".col");
+          const href = col5Link.getAttribute("href");
+
+          if (col.dataset.animating === "true") return;
+          col.dataset.animating = "true";
+
+          col.classList.add("anim-5-hand-up");
+
+          setTimeout(function () {
+            col.classList.remove("anim-5-hand-up");
+            col.classList.add("anim-5-swap");
+
+            setTimeout(function () {
+              col.classList.remove("anim-5-swap");
+              col.classList.add("anim-5-descend");
+
+              setTimeout(function () {
+                window.location.href = href;
+              }, 1000);
+            }, 500);
+          }, 1000);
+        });
+      }
     </script>
   </body>
 </html>
