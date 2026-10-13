@@ -255,7 +255,8 @@
         display: block;
       }
 
-      .video-close-btn img {
+      .video-close-btn img,
+      .video-close-btn svg {
         width: 100%;
         height: 100%;
         object-fit: contain;
@@ -353,13 +354,14 @@
 
         <div class="popup-video-wrapper">
           <button class="video-close-btn">
-            <img src="./assets/images/close.png" alt="" />
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="#5a5a5a" stroke-width="3.4" stroke-linecap="round"/></svg>
           </button>
 
           <div class="popup-video-box">
             <video
               class="popup-video"
               src="./assets/videos/v1.webm"
+              preload="none"
               playsinline
             ></video>
 
@@ -396,19 +398,19 @@
         <div class="swiper video-swiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide">
-              <video src="./assets/videos/4-1.mp4" muted loop playsinline></video>
+              <video src="./assets/videos/4-1.mp4" preload="auto" muted loop playsinline></video>
             </div>
             <div class="swiper-slide">
-              <video src="./assets/videos/4-2.mp4" muted loop playsinline></video>
+              <video src="./assets/videos/4-2.mp4" preload="none" muted loop playsinline></video>
             </div>
             <div class="swiper-slide">
-              <video src="./assets/videos/4-3.mp4" muted loop playsinline></video>
+              <video src="./assets/videos/4-3.mp4" preload="none" muted loop playsinline></video>
             </div>
             <div class="swiper-slide">
-              <video src="./assets/videos/4-4.mp4" muted loop playsinline></video>
+              <video src="./assets/videos/4-4.mp4" preload="none" muted loop playsinline></video>
             </div>
             <div class="swiper-slide">
-              <video src="./assets/videos/4-5.mp4" muted loop playsinline></video>
+              <video src="./assets/videos/4-5.mp4" preload="none" muted loop playsinline></video>
             </div>
           </div>
         </div>
@@ -473,6 +475,8 @@
         document.querySelectorAll(".video-swiper video").forEach((video) => {
           video.pause();
           video.currentTime = 0;
+          // inactive slides must not download until their slide is reached
+          video.preload = "none";
         });
 
         const activeVideo = document.querySelector(
@@ -480,6 +484,7 @@
         );
 
         if (activeVideo) {
+          activeVideo.preload = "auto";
           activeVideo.currentTime = 0;
           activeVideo.play();
         }
@@ -543,19 +548,10 @@
 
         const startAt = 0;
 
-        if (popupVideo.readyState >= 1) {
-          popupVideo.currentTime = startAt;
-          popupVideo.play();
-        } else {
-          popupVideo.addEventListener(
-            "loadedmetadata",
-            () => {
-              popupVideo.currentTime = startAt;
-              popupVideo.play();
-            },
-            { once: true },
-          );
-        }
+        // preload is "none", so play() itself starts the download (waiting for
+        // loadedmetadata first would wait forever)
+        popupVideo.currentTime = startAt;
+        popupVideo.play();
 
         progressBar.value = 0;
         currentTimeText.textContent = "0:00";
@@ -669,6 +665,5 @@
 
     <script src="./assets/js/data.js"></script>
 <script src="./assets/js/app.js"></script>
-    <script src="./assets/js/djp.js"></script>
   </body>
 </html>
